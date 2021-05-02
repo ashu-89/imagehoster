@@ -89,16 +89,26 @@ public class ImageController {
     //This method fetches the image with the corresponding id from the database and adds it to the model with the key as 'image'
     //The method then returns 'images/edit.html' file wherein you fill all the updated details of the image
 
-    //The method first needs to convert the list of all the tags to a string containing all the tags separated by a comma and then add this string in a Model type object
+    //The method first needs to convert the list of all the tags to a string containing all the tags separated by a comma and then
+    // add this string in a Model type object
     //This string is then displayed by 'edit.html' file as previous tags of an image
     @RequestMapping(value = "/editImage")
-    public String editImage(@RequestParam("imageId") Integer imageId, Model model) {
+    public String editImage(@RequestParam("imageId") Integer imageId, Model model, HttpSession session) {
         Image image = imageService.getImage(imageId);
 
-        String tags = convertTagsToString(image.getTags());
+        User currentUser = (User) session.getAttribute("loggeduser");
         model.addAttribute("image", image);
-        model.addAttribute("tags", tags);
-        return "images/edit";
+
+
+        if(currentUser.getId() == image.getUser().getId()) {
+            String tags = convertTagsToString(image.getTags());
+            model.addAttribute("tags", tags);
+            return "/images/edit";
+        } else{
+            model.addAttribute("editError", "Edit error");
+            model.addAttribute("tags", image.getTags());
+            return "/images/image";
+        }
     }
 
     //This controller method is called when the request pattern is of type 'images/edit' and also the incoming request is of PUT type
@@ -132,7 +142,7 @@ public class ImageController {
         updatedImage.setDate(new Date());
 
         imageService.updateImage(updatedImage);
-        return "redirect:/images/" + updatedImage.getTitle();
+        return "redirect:/images/" + updatedImage.getId();
     }
 
 
@@ -140,9 +150,25 @@ public class ImageController {
     //The method calls the deleteImage() method in the business logic passing the id of the image to be deleted
     //Looks for a controller method with request mapping of type '/images'
     @RequestMapping(value = "/deleteImage", method = RequestMethod.DELETE)
-    public String deleteImageSubmit(@RequestParam(name = "imageId") Integer imageId) {
-        imageService.deleteImage(imageId);
-        return "redirect:/images";
+    public String deleteImageSubmit(@RequestParam(name = "imageId") Integer imageId, HttpSession session, Model model) {
+        Image imageToDel = imageService.getImageById(imageId);
+        User currentUser = (User) session.getAttribute("loggeduser");
+
+        //model.addAttribute("image", imageToDel);
+        //model.addAttribute("tags", tags);
+
+        if(currentUser.getId() == imageToDel.getUser().getId() ) {
+            imageService.deleteImage(imageId);
+            return "redirect:/images";
+
+        } else{
+            model.addAttribute("image", imageToDel);
+            model.addAttribute("tags", imageToDel.getTags());
+            model.addAttribute("deleteError", "delete err - only owner can delete");
+            return "images/image";
+        }
+
+
     }
 
 
