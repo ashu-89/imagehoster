@@ -1,5 +1,9 @@
+ImageHoster/service/CommentService.class
+ImageHoster/model/Comment.class
 ImageHoster/service/TagService.class
+ImageHoster/repository/CommentRepositoryImpl.class
 ImageHoster/service/ImageService.class
+ImageHoster/repository/CommentRepository.class
 ImageHoster/repository/UserRepository.class
 ImageHoster/model/UserProfile.class
 ImageHoster/service/UserService.class

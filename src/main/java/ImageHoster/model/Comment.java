@@ -5,12 +5,14 @@ import org.hibernate.annotations.Fetch;
 import javax.persistence.*;
 import java.time.LocalDate;
 
+@Entity
+@Table(name = "comments")
 public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
-    private int id;
+    private Integer id;
 
     private String text;
 
@@ -24,11 +26,11 @@ public class Comment {
     @JoinColumn( name = "image_id")
     private Image image;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
