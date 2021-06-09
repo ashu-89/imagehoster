@@ -1,21 +1,22 @@
 package ImageHoster.controller;
 
+import ImageHoster.model.Comment;
 import ImageHoster.model.Image;
 import ImageHoster.model.Tag;
 import ImageHoster.model.User;
+import ImageHoster.repository.CommentRepository;
+import ImageHoster.service.CommentService;
 import ImageHoster.service.ImageService;
 import ImageHoster.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.*;
 
 @Controller
@@ -26,6 +27,9 @@ public class ImageController {
 
     @Autowired
     private TagService tagService;
+
+    @Autowired
+    private CommentService commentService;
 
     //This method displays all the images in the user home page after successful login
     @RequestMapping("images")
@@ -215,5 +219,34 @@ public class ImageController {
         tagString.append(lastTag.getName());
 
         return tagString.toString();
+    }
+
+    @RequestMapping(value = "/image/{imageId}/{imageTitle}/comments", method = RequestMethod.POST)
+    public String createComments( @RequestParam("comment") String comment,
+                                 @PathVariable(name = "imageId") Integer imageId,
+                                 @PathVariable(name = "imageTitle") String imageTitle,
+                                 Model model, HttpSession session)
+    {
+        Image imageToAddCommentTo = imageService.getImage(imageId);
+
+        if(imageToAddCommentTo != null){
+            Comment commentToAdd = new Comment();
+            User currentUser = (User) session.getAttribute("loggeduser");
+
+            commentToAdd.setUser(currentUser);
+            commentToAdd.setImage(imageToAddCommentTo);
+            //commentToAdd.setCreatedDate();
+            commentToAdd.setText(comment);
+            commentService.saveComment(commentToAdd);
+
+
+            List<Comment> commentList = new ArrayList<>();
+            commentList.add(commentToAdd);
+
+            imageToAddCommentTo.setComments(commentList);
+            imageService.updateImage(imageToAddCommentTo);
+        }
+
+        return "redirect:/images/" + imageToAddCommentTo.getId();
     }
 }

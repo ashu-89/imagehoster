@@ -1,6 +1,7 @@
 package ImageHoster.service;
 
 import ImageHoster.model.User;
+import ImageHoster.repository.UserCrudRepo;
 import ImageHoster.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,6 +11,9 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private UserCrudRepo userCrudRepo;
 
     //Call the registerUser() method in the UserRepository class to persist the user record in the database
     public void registerUser(User newUser) {
@@ -30,6 +34,10 @@ public class UserService {
         } else {
             return null;
         }
+    }
+
+    public User findByUserName(String username){
+        return userCrudRepo.findByUserName(username);
     }
 
 }

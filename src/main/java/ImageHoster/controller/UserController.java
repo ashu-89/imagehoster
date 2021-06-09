@@ -45,6 +45,16 @@ public class UserController {
     public String registerUser(User user, Model model) {
 
         String error = "Password must contain atleast 1 alphabet, 1 number & 1 special character";
+        String userNameError = "username taken";
+
+        //first check if user name is already taken or not.
+        User userExists = userService.findByUserName(user.getUsername());
+        if(userExists != null){
+            model.addAttribute("User", user);
+            model.addAttribute("userNameError", userNameError);
+            return "/users/registration";
+        }
+
 
         if(isPwdStrong(user.getPassword())){
             userService.registerUser(user);
