@@ -32,11 +32,25 @@ public class ImageController {
     private CommentService commentService;
 
     //This method displays all the images in the user home page after successful login
-    @RequestMapping("images")
+    @RequestMapping("/images")
     public String getUserImages(Model model) {
         List<Image> images = imageService.getAllImages();
+        Collections.sort(images, new ImageSorter());
         model.addAttribute("images", images);
         return "images";
+    }
+
+    private class ImageSorter implements Comparator<Image> {
+
+        @Override
+        public int compare(Image o1, Image o2) {
+            if(o1.getDate().before(o2.getDate()))
+                return 1;
+            else if(o1.getDate().after(o2.getDate()))
+                return -1;
+            else
+                return 0;
+        }
     }
 
     //This method is called when the details of the specific image with corresponding title are to be displayed
@@ -54,8 +68,24 @@ public class ImageController {
         Image image = imageService.getImageById(id);
         model.addAttribute("image", image);
         model.addAttribute("tags", image.getTags());
-        model.addAttribute("comments", image.getComments() );
+        List<Comment> orderedComments = image.getComments();
+        //orderedComments.sort(comment.createdDate);
+        Collections.sort(orderedComments, new commentSorter());
+        model.addAttribute("comments", orderedComments );
         return "images/image";
+    }
+
+    private class commentSorter implements Comparator<Comment>{
+
+        public int compare(Comment a, Comment b){
+            if(a.getCreatedDate().isBefore(b.getCreatedDate()))
+                return 1;
+            else if(a.getCreatedDate().isAfter(b.getCreatedDate()))
+                return -1;
+            else
+                return 0;
+        }
+
     }
 
     //This controller method is called when the request pattern is of type 'images/upload'
@@ -235,7 +265,7 @@ public class ImageController {
 
             commentToAdd.setUser(currentUser);
             commentToAdd.setImage(imageToAddCommentTo);
-            //commentToAdd.setCreatedDate();
+            commentToAdd.setCreatedDate(LocalDate.now());
             commentToAdd.setText(comment);
             commentService.saveComment(commentToAdd);
 
