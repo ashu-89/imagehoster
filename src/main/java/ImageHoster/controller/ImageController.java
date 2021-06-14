@@ -77,6 +77,7 @@ public class ImageController {
 
     private class commentSorter implements Comparator<Comment>{
 
+        @Override
         public int compare(Comment a, Comment b){
             if(a.getCreatedDate().isBefore(b.getCreatedDate()))
                 return 1;

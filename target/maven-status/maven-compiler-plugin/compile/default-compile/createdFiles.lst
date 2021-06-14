@@ -4,9 +4,14 @@ ImageHoster/service/TagService.class
 ImageHoster/service/ImageService.class
 ImageHoster/repository/CommentRepository.class
 ImageHoster/repository/UserRepository.class
+ImageHoster/controller/ImageController$1.class
 ImageHoster/model/UserProfile.class
 ImageHoster/service/UserService.class
 ImageHoster/model/User.class
+ImageHoster/controller/HomeController$ImageSorter.class
+ImageHoster/controller/ImageController$ImageSorter.class
+ImageHoster/controller/HomeController$1.class
+ImageHoster/controller/ImageController$commentSorter.class
 ImageHoster/model/Tag.class
 ImageHoster/repository/ImageRepository.class
 ImageHoster/repository/TagRepository.class
