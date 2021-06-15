@@ -72,7 +72,7 @@ public class ImageController {
         //orderedComments.sort(comment.createdDate);
         Collections.sort(orderedComments, new commentSorter());
         model.addAttribute("comments", orderedComments );
-        return "images/image";
+        return "/images/image";
     }
 
     private class commentSorter implements Comparator<Comment>{
@@ -141,7 +141,7 @@ public class ImageController {
             model.addAttribute("tags", tags);
             return "/images/edit";
         } else{
-            model.addAttribute("editError", "Edit error");
+            model.addAttribute("editError", "Only the owner of the image can edit the image");
             model.addAttribute("tags", image.getTags());
             model.addAttribute("comments", image.getComments() );
             return "/images/image";
@@ -201,7 +201,7 @@ public class ImageController {
         } else{
             model.addAttribute("image", imageToDel);
             model.addAttribute("tags", imageToDel.getTags());
-            model.addAttribute("deleteError", "delete err - only owner can delete");
+            model.addAttribute("deleteError", "Only the owner of the image can delete the image");
             model.addAttribute("comments", imageToDel.getComments() );
             return "images/image";
         }
@@ -251,6 +251,8 @@ public class ImageController {
 
         return tagString.toString();
     }
+
+    //This method allows logged in user to add comment to any image.
 
     @RequestMapping(value = "/image/{imageId}/{imageTitle}/comments", method = RequestMethod.POST)
     public String createComments( @RequestParam("comment") String comment,

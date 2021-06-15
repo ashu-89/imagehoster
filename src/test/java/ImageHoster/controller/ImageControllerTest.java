@@ -1,10 +1,11 @@
-/*
+
 package ImageHoster.controller;
 
 import ImageHoster.model.Image;
 import ImageHoster.model.Tag;
 import ImageHoster.model.User;
 import ImageHoster.model.UserProfile;
+import ImageHoster.service.CommentService;
 import ImageHoster.service.ImageService;
 import ImageHoster.service.TagService;
 import org.junit.Test;
@@ -39,6 +40,9 @@ public class ImageControllerTest {
 
     @MockBean
     private TagService tagService;
+
+    @MockBean
+    private CommentService commentService;
 
     //This test checks the controller logic to get all the images after the user is logged in the application and checks whether the logic returns the html file 'images.html'
     @Test
@@ -86,10 +90,12 @@ public class ImageControllerTest {
         image.setDescription("This image is for testing purpose");
         image.setUser(user);
 
-        Mockito.when(imageService.getImage(Mockito.anyInt())).thenReturn(image);
+        //Mockito.when(imageService.getImage(Mockito.anyInt())).thenReturn(image);
+        Mockito.when(imageService.getImageById( Mockito.anyInt() ) ).thenReturn(image);
 
-        this.mockMvc.perform(get("/images/1/new").session(session))
-                .andExpect(view().name("images/image"))
+
+        this.mockMvc.perform(get("/images/1").session(session))
+                .andExpect(view().name("/images/image"))
                 .andExpect(content().string(containsString("Welcome User. This is the image")));
 
     }
@@ -186,7 +192,7 @@ public class ImageControllerTest {
         this.mockMvc.perform(get("/editImage")
                 .param("imageId", "1")
                 .session(session))
-                .andExpect(view().name("images/edit"))
+                .andExpect(view().name("/images/edit"))
                 .andExpect(content().string(containsString("Edit Image")));
     }
 
@@ -257,7 +263,7 @@ public class ImageControllerTest {
         image.setDescription("This image is for testing purpose");
         image.setUser(user);
 
-        Mockito.when(imageService.getImage(Mockito.anyInt())).thenReturn(image);
+        Mockito.when(imageService.getImageById(Mockito.anyInt())).thenReturn(image);
 
         this.mockMvc.perform(delete("/deleteImage")
                 .param("imageId", "1")
@@ -301,7 +307,7 @@ public class ImageControllerTest {
         image.setUser(user1);
 
 
-        Mockito.when(imageService.getImage(Mockito.anyInt())).thenReturn(image);
+        Mockito.when(imageService.getImageById(Mockito.anyInt())).thenReturn(image);
 
         this.mockMvc.perform(delete("/deleteImage")
                 .param("imageId", "1")
@@ -310,4 +316,4 @@ public class ImageControllerTest {
     }
 }
 
-*/
+

@@ -1,4 +1,4 @@
-/*
+
 package ImageHoster.controller;
 
 import ImageHoster.model.User;
@@ -41,7 +41,7 @@ public class UserControllerTest {
     @Test
     public void signupWithGetRequest() throws Exception {
         this.mockMvc.perform(get("/users/registration"))
-                .andExpect(view().name("users/registration"))
+                .andExpect(view().name("/users/registration"))
                 .andExpect(content().string(containsString("Please Register:")));
     }
 
@@ -79,14 +79,15 @@ public class UserControllerTest {
         user.setProfile(userProfile);
         user.setId(1);
         user.setUsername("Abhi");
-        user.setPassword("password1@");
+        user.setPassword("Password1@");
 
 
         this.mockMvc.perform(post("/users/registration")
                 .flashAttr("user", user)
         )
-                .andExpect(view().name("users/login"))
-                .andExpect(content().string(containsString("Please Login:")));
+               // .andExpect(view().name("/users/login"))
+                .andExpect(redirectedUrl("/users/login"));
+                //.andExpect(content().string(containsString("Please Login:")));
     }
 
     //This test checks the controller logic for user signin when user requests for a signin form where he can enter the username and password and checks whether the logic returns the html file 'users/login.html'
@@ -163,8 +164,8 @@ public class UserControllerTest {
         session.setAttribute("loggeduser", user);
 
         this.mockMvc.perform(post("/users/logout").session(session))
-                .andExpect(view().name("index"))
-                .andExpect(content().string(containsString("Image Hoster")));
+                .andExpect(redirectedUrl("/"));
+               // .andExpect(content().string(containsString("Image Hoster")));
     }
 }
-*/
+
