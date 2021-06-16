@@ -1,6 +1,7 @@
 /Users/ashu/Desktop/upgrad/imagehoster/src/main/java/ImageHoster/controller/HomeController.java
 /Users/ashu/Desktop/upgrad/imagehoster/src/main/java/ImageHoster/model/UserProfile.java
 /Users/ashu/Desktop/upgrad/imagehoster/src/main/java/ImageHoster/controller/UserController.java
+/Users/ashu/Desktop/upgrad/imagehoster/src/main/java/ImageHoster/repository/UserCrudRepo.java
 /Users/ashu/Desktop/upgrad/imagehoster/src/main/java/ImageHoster/controller/ImageController.java
 /Users/ashu/Desktop/upgrad/imagehoster/src/main/java/ImageHoster/model/Tag.java
 /Users/ashu/Desktop/upgrad/imagehoster/src/main/java/ImageHoster/repository/TagRepository.java
